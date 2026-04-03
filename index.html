@@ -442,12 +442,20 @@
             drawMindmap();
         });
         
+        function buildAppUrl(baseUrl, appName) {
+            const separator = baseUrl.includes('?') ? '&' : '?';
+            const pieUrl = window.location.href;
+            return `${baseUrl}${separator}fromPie=${encodeURIComponent(pieUrl)}&sourceApp=${encodeURIComponent(appName)}`;
+        }
+
         canvas.addEventListener('click', (e) => {
             const pos = getMousePos(e);
             const hit = getSliceAtPosition(pos.x, pos.y);
             
             if (hit.type === 'slice') {
-                window.open(apps[hit.index].url, '_blank');
+                const app = apps[hit.index];
+                const linkedUrl = buildAppUrl(app.url, app.name.replace('\n', ' '));
+                window.open(linkedUrl, '_blank');
             } else if (hit.type === 'center') {
                 window.open('https://leelemacjames.github.io/thematicPhysics/', '_blank');
             }
